@@ -3,6 +3,7 @@ package main
 import (
 	"time"
 
+	"github.com/driveTest-Ericsson/backend/internal/auth"
 	"github.com/driveTest-Ericsson/backend/internal/db"
 	"github.com/driveTest-Ericsson/backend/internal/env"
 	"github.com/driveTest-Ericsson/backend/internal/mailer"
@@ -87,11 +88,14 @@ func main() {
 		cfg.mail.gmail.pass,
 	)
 
+	jwtAuthenticator := auth.NewJWTAuthenticator(cfg.auth.token.secret, cfg.auth.token.iss, cfg.auth.token.iss)
+
 	app := &application{
-		config: cfg,
-		store:  store,
-		logger: logger,
-		mailer: mailer,
+		config:        cfg,
+		store:         store,
+		logger:        logger,
+		authenticator: jwtAuthenticator,
+		mailer:        mailer,
 	}
 
 	mux := app.mount()

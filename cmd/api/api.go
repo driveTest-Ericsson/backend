@@ -10,6 +10,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/driveTest-Ericsson/backend/internal/auth"
 	"github.com/driveTest-Ericsson/backend/internal/mailer"
 	"github.com/driveTest-Ericsson/backend/internal/store"
 	"github.com/go-chi/chi/v5"
@@ -22,10 +23,11 @@ import (
 )
 
 type application struct {
-	config config
-	store  store.Storage
-	logger *zap.SugaredLogger
-	mailer mailer.Client
+	config        config
+	store         store.Storage
+	logger        *zap.SugaredLogger
+	mailer        mailer.Client
+	authenticator auth.Authenticator
 }
 
 type dbConfig struct {
@@ -89,7 +91,6 @@ func (app *application) mount() http.Handler {
 		AllowCredentials: false,
 		MaxAge:           300, // Maximum value not ignored by any of major browsers
 	}))
-	//router.Use(app.RateLimiterMiddleware)
 
 	// Set a timeout value on the request context (ctx), that will signal
 	// through ctx.Done() that the request has timed out and further
@@ -101,6 +102,22 @@ func (app *application) mount() http.Handler {
 
 		docsURL := fmt.Sprintf("%s/swagger/doc.json", app.config.addr)
 		r.Get("/swagger/*", httpSwagger.Handler(httpSwagger.URL(docsURL)))
+
+		r.Route("/users", func(r chi.Router) {
+
+			r.Put("/activate/{token}", app.activateUserHandler)
+
+			r.Route("/{userID}", func(r chi.Router) {
+				r.Use(app.AuthTokenMiddleware)
+
+				r.Get("/", app.getUserHandler)
+			})
+		})
+		// Public Routes
+		r.Route("/authentication", func(r chi.Router) {
+			r.Post("/user", app.registerUserHandler)
+			r.Post("/token", app.createTokenHandler)
+		})
 
 	})
 
