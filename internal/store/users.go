@@ -1,7 +1,6 @@
 package store
 
 import (
-	"bytes"
 	"context"
 	"crypto/sha256"
 	"database/sql"
@@ -45,8 +44,16 @@ func (p *password) Set(text string) error {
 	return nil
 }
 
-func (p *password) Check(text string) bool {
-	return bytes.Equal(p.hash, []byte(text))
+func (p *password) Check(text string) (bool, error) {
+	err := bcrypt.CompareHashAndPassword(p.hash, []byte(text))
+	if err != nil {
+		if errors.Is(err, bcrypt.ErrMismatchedHashAndPassword) {
+			return false, nil
+		}
+		return false, err
+	}
+
+	return true, nil
 }
 
 type UserStore struct {

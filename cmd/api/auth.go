@@ -173,7 +173,13 @@ func (app *application) createTokenHandler(w http.ResponseWriter, r *http.Reques
 	}
 
 	// check user password
-	if !user.Password.Check(payload.Password) {
+	ok, err := user.Password.Check(payload.Password)
+
+	if err != nil {
+		app.internalServerError(w, r, err)
+		return
+	}
+	if !ok {
 		app.unauthorizedErrorResponse(w, r, errors.New("unauthorized"))
 		return
 	}
