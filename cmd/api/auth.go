@@ -3,6 +3,7 @@ package main
 import (
 	"crypto/sha256"
 	"encoding/hex"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -92,14 +93,7 @@ func (app *application) registerUserHandler(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	// userWithToken := UserWithToken{
-	// 	User:  user,
-	// 	Token: plainToken,
-	// }
-
 	activationURL := fmt.Sprintf("%s/confirm/%s", app.config.frontendURL, plainToken)
-
-	// isProdEnv := app.config.env == "production"
 
 	vars := &mailer.GmailData{
 		Username:      user.Username,
@@ -175,6 +169,12 @@ func (app *application) createTokenHandler(w http.ResponseWriter, r *http.Reques
 			app.internalServerError(w, r, err)
 
 		}
+		return
+	}
+
+	// check user password
+	if !user.Password.Check(payload.Password) {
+		app.unauthorizedErrorResponse(w, r, errors.New("unauthorized"))
 		return
 	}
 
