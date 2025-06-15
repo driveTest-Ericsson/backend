@@ -45,8 +45,12 @@ func (p *password) Set(text string) error {
 	return nil
 }
 
-func (p *password) Check(text string) bool {
-	return bytes.Equal(p.hash, []byte(text))
+func (p *password) Check(text string) (bool, error) {
+	hash, err := bcrypt.GenerateFromPassword([]byte(text), bcrypt.DefaultCost)
+	if err != nil {
+		return false, err
+	}
+	return bytes.Equal(p.hash, hash), nil
 }
 
 type UserStore struct {
