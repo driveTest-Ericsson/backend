@@ -175,6 +175,7 @@ func (app *application) createTokenHandler(w http.ResponseWriter, r *http.Reques
 	// check user password
 	if !user.Password.Check(payload.Password) {
 		app.unauthorizedErrorResponse(w, r, errors.New("unauthorized"))
+		return
 	}
 
 	// generate token -> add claims
