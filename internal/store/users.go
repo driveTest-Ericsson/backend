@@ -1,6 +1,7 @@
 package store
 
 import (
+	"bytes"
 	"context"
 	"crypto/sha256"
 	"database/sql"
@@ -42,6 +43,10 @@ func (p *password) Set(text string) error {
 	p.hash = hash
 
 	return nil
+}
+
+func (p *password) Check(text string) bool {
+	return bytes.Equal(p.hash, []byte(text))
 }
 
 type UserStore struct {
