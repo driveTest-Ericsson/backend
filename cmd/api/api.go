@@ -19,7 +19,6 @@ import (
 	"github.com/go-chi/cors"
 	"go.uber.org/zap"
 
-	_ "github.com/driveTest-Ericsson/backend/docs"
 	httpSwagger "github.com/swaggo/http-swagger/v2"
 )
 
