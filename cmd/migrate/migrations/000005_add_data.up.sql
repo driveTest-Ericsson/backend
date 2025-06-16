@@ -19,7 +19,6 @@ CREATE TABLE IF NOT EXISTS
         c_i NUMERIC(5, 2), -- Carrier to Interference ratio in dB
         -- 3G Metrics
         rscp INTEGER CHECK (rscp BETWEEN -120 AND -40), -- RSCP in dBm
-        ec_n0_3g NUMERIC(5, 2), -- Ec/N0 for 3G
         -- 4G Metrics
         rsrp INTEGER CHECK (rsrp BETWEEN -140 AND -44), -- RSRP in dBm
         rsrq NUMERIC(5, 2) CHECK (rsrq BETWEEN -20 AND -3), -- RSRQ in dB
