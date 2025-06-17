@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS
     cell (
         id SERIAL PRIMARY KEY,
+        user_id bigint NOT NULL,
         lat REAL NOT NULL,
         long REAL NOT NULL,
         cell_tech VARCHAR(7),
@@ -28,5 +29,6 @@ CREATE TABLE IF NOT EXISTS
             time zone,
             created_at timestamp(0)
         with
-            time zone NOT NULL DEFAULT NOW()
+            time zone NOT NULL DEFAULT NOW(),
+            FOREIGN KEY (user_id) REFERENCES users (id)
     );
