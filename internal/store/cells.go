@@ -3,6 +3,7 @@ package store
 import (
 	"context"
 	"database/sql"
+	"errors"
 )
 
 type CellStore struct {
@@ -34,13 +35,176 @@ type Cell struct {
 	CreatedAt     string  `json:"created_at"`
 }
 
-func (s *CellStore) Create(context.Context, *sql.Tx, *Cell) error {
+func (s *CellStore) Create(ctx context.Context, cell *Cell) error {
+	query := `
+	INSERT INTO cell (lat, long, cell_identity, plmn, lac, rac, tac, frequency_band, arfcn, frequency_mhz, rxlev, rxqual, ec_n0, c_i, rscp, rsrp, rsrq, sinr, generated_at, created_at)
+	VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20)
+	RETURNING id,created_at
+	`
+
+	ctx, cancel := context.WithTimeout(ctx, QueryTimeoutDuration)
+	defer cancel()
+
+	err := s.db.QueryRowContext(
+		ctx,
+		query,
+		cell.Lat,
+		cell.Long,
+		cell.CellIdentity,
+		cell.PLMN,
+		cell.Lac,
+		cell.Rac,
+		cell.Tac,
+		cell.FrequencyBand,
+		cell.ARFCN,
+		cell.FrequencyMHZ,
+		cell.RXLev,
+		cell.RXQual,
+		cell.ECN0,
+		cell.CI,
+		cell.RSCP,
+		cell.RSRP,
+		cell.RSRQ,
+		cell.SINR,
+		cell.GeneratedAt,
+	).Scan(
+		&cell.ID,
+		&cell.CreatedAt,
+	)
+
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
-func (s *CellStore) GetByID(context.Context, int64) (*Cell, error) {
-	return nil, nil
+
+func (s *CellStore) GetByID(ctx context.Context, id int64) (*Cell, error) {
+	query := `
+	SELECT *
+	FROM cells
+	WHERE id = $1
+	`
+
+	ctx, cancel := context.WithTimeout(ctx, QueryTimeoutDuration)
+	defer cancel()
+
+	var cell Cell
+	err := s.db.QueryRowContext(
+		ctx,
+		query,
+		id,
+	).Scan(
+		&cell.ID,
+		&cell.Lat,
+		&cell.Long,
+		&cell.CellIdentity,
+		&cell.PLMN,
+		&cell.Lac,
+		&cell.Rac,
+		&cell.Tac,
+		&cell.FrequencyBand,
+		&cell.ARFCN,
+		&cell.FrequencyMHZ,
+		&cell.RXLev,
+		&cell.RXQual,
+		&cell.ECN0,
+		&cell.CI,
+		&cell.RSCP,
+		&cell.RSRP,
+		&cell.RSRQ,
+		&cell.SINR,
+		&cell.GeneratedAt,
+		&cell.CreatedAt,
+	)
+
+	if err != nil {
+		switch {
+		case errors.Is(err, sql.ErrNoRows):
+			return nil, ErrNotFound
+		default:
+			return nil, err
+		}
+	}
+
+	return &cell, nil
+
 }
 
-func (s *CellStore) Delete(context.Context, int64) error {
+func (s *CellStore) GetCells(ctx context.Context, cq *PaginatedCellQuery) (*[]Cell, error) {
+	query := `
+	SELECT *
+	FROM cells
+	ORDER BY created_at ` + cq.Sort + `
+	LIMIT $1 OFFSET $2;
+	`
+
+	ctx, cancel := context.WithTimeout(ctx, QueryTimeoutDuration)
+	defer cancel()
+
+	rows, err := s.db.QueryContext(ctx, query, cq.Limit, cq.Offset)
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	var cells []Cell
+
+	for rows.Next() {
+		var cell Cell
+		err := rows.Scan(
+			&cell.ID,
+			&cell.Lat,
+			&cell.Long,
+			&cell.CellIdentity,
+			&cell.PLMN,
+			&cell.Lac,
+			&cell.Rac,
+			&cell.Tac,
+			&cell.FrequencyBand,
+			&cell.ARFCN,
+			&cell.FrequencyMHZ,
+			&cell.RXLev,
+			&cell.RXQual,
+			&cell.ECN0,
+			&cell.CI,
+			&cell.RSCP,
+			&cell.RSRP,
+			&cell.RSRQ,
+			&cell.SINR,
+			&cell.GeneratedAt,
+			&cell.CreatedAt,
+		)
+		if err != nil {
+			return nil, err
+		}
+
+		cells = append(cells, cell)
+	}
+	return &cells, nil
+
+}
+
+func (s *CellStore) Delete(ctx context.Context, id int64) error {
+	query := `DELETE FROM cells WHERE id = $1`
+
+	ctx, cancel := context.WithTimeout(ctx, QueryTimeoutDuration)
+	defer cancel()
+
+	res, err := s.db.ExecContext(ctx, query, id)
+	if err != nil {
+		return err
+	}
+
+	rows, err := res.RowsAffected()
+	if err != nil {
+		return err
+	}
+
+	if rows == 0 {
+		return ErrNotFound
+	}
+
 	return nil
 }

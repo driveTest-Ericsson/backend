@@ -113,6 +113,14 @@ func (app *application) mount() http.Handler {
 				r.Get("/", app.getUserHandler)
 			})
 		})
+
+		r.Route("/cells", func(r chi.Router) {
+			r.Group(func(r chi.Router) {
+				r.Use(app.AuthTokenMiddleware)
+				r.Get("/", app.getCellsHandler)
+			})
+		})
+
 		// Public Routes
 		r.Route("/authentication", func(r chi.Router) {
 			r.Post("/user", app.registerUserHandler)
