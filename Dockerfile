@@ -26,6 +26,9 @@ WORKDIR /app
 
 # Copy only the binary from builder
 COPY --from=builder /app/bin/main .
+COPY --from=builder /app/Makefile ./Makefile
+COPY ./entrypoint.sh ./entrypoint.sh
+COPY ./cmd/migrate/migrations ./cmd/migrate/migrations
 
 # Expose app port (adjust if needed)
 EXPOSE 8080
