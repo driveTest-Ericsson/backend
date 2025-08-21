@@ -31,10 +31,6 @@ func (app *application) getUserHandler(w http.ResponseWriter, r *http.Request) {
 
 }
 
-type FollowUser struct {
-	UserID int64 `json:"user_id"`
-}
-
 // ActivateUser godoc
 //
 //	@Summary		Activates/Register a user

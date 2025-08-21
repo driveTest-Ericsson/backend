@@ -112,6 +112,91 @@ const docTemplate = `{
                 }
             }
         },
+        "/cells/": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Fetches all cells",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "cell"
+                ],
+                "summary": "Fetches cells",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/store.Cell"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {}
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {}
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Adds the new data to Cell datas",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "cell"
+                ],
+                "summary": "Create Cell Data",
+                "parameters": [
+                    {
+                        "description": "cell params",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/main.PostCellPayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Cell Created",
+                        "schema": {
+                            "$ref": "#/definitions/store.Cell"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {}
+                    }
+                }
+            }
+        },
         "/users/activate/{token}": {
             "put": {
                 "security": [
@@ -223,6 +308,71 @@ const docTemplate = `{
                 }
             }
         },
+        "main.PostCellPayload": {
+            "type": "object",
+            "properties": {
+                "arfcn": {
+                    "type": "integer"
+                },
+                "c_i": {
+                    "type": "number"
+                },
+                "cell_identity": {
+                    "type": "integer"
+                },
+                "cell_tech": {
+                    "type": "string"
+                },
+                "ecn0": {
+                    "type": "number"
+                },
+                "frequency_band": {
+                    "type": "string"
+                },
+                "frequency_mhx": {
+                    "type": "number"
+                },
+                "generated_at": {
+                    "type": "string"
+                },
+                "lac": {
+                    "type": "integer"
+                },
+                "lat": {
+                    "type": "number"
+                },
+                "long": {
+                    "type": "number"
+                },
+                "plmn": {
+                    "type": "string"
+                },
+                "rac": {
+                    "type": "integer"
+                },
+                "rscp": {
+                    "type": "integer"
+                },
+                "rsrp": {
+                    "type": "integer"
+                },
+                "rsrq": {
+                    "type": "number"
+                },
+                "rxlev": {
+                    "type": "integer"
+                },
+                "rxqual": {
+                    "type": "integer"
+                },
+                "sinr": {
+                    "type": "number"
+                },
+                "tac": {
+                    "type": "integer"
+                }
+            }
+        },
         "main.RegisterUserPayload": {
             "type": "object",
             "required": [
@@ -243,6 +393,80 @@ const docTemplate = `{
                 "username": {
                     "type": "string",
                     "maxLength": 100
+                }
+            }
+        },
+        "store.Cell": {
+            "type": "object",
+            "properties": {
+                "arfcn": {
+                    "type": "integer"
+                },
+                "c_i": {
+                    "type": "number"
+                },
+                "cell_identity": {
+                    "type": "integer"
+                },
+                "cell_tech": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "ecn0": {
+                    "type": "number"
+                },
+                "frequency_band": {
+                    "type": "string"
+                },
+                "frequency_mhx": {
+                    "type": "number"
+                },
+                "generated_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "lac": {
+                    "type": "integer"
+                },
+                "lat": {
+                    "type": "number"
+                },
+                "long": {
+                    "type": "number"
+                },
+                "plmn": {
+                    "type": "string"
+                },
+                "rac": {
+                    "type": "integer"
+                },
+                "rscp": {
+                    "type": "integer"
+                },
+                "rsrp": {
+                    "type": "integer"
+                },
+                "rsrq": {
+                    "type": "number"
+                },
+                "rxlev": {
+                    "type": "integer"
+                },
+                "rxqual": {
+                    "type": "integer"
+                },
+                "sinr": {
+                    "type": "number"
+                },
+                "tac": {
+                    "type": "integer"
+                },
+                "user_id": {
+                    "type": "integer"
                 }
             }
         },

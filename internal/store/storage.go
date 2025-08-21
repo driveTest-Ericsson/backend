@@ -26,12 +26,20 @@ type Storage struct {
 	Roles interface {
 		GetByName(context.Context, string) (*Role, error)
 	}
+
+	Cells interface {
+		Create(context.Context, *Cell) (*Cell, error)
+		GetByID(context.Context, int64) (*Cell, error)
+		GetCells(context.Context, *PaginatedCellQuery) (*[]Cell, error)
+		Delete(context.Context, int64) error
+	}
 }
 
 func NewPostgresStorage(db *sql.DB) Storage {
 	return Storage{
 		Users: &UserStore{db},
 		Roles: &RoleStore{db},
+		Cells: &CellStore{db},
 	}
 }
 
