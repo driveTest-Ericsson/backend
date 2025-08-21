@@ -15,6 +15,7 @@ COPY . .
 
 # Build the Go app (static binary)
 RUN go build -buildvcs=false -o ./bin/main ./cmd/api
+RUN go build -buildvcs=false -o ./bin/seed ./cmd/migrate/seed
 
 # Stage 2: Run
 FROM alpine:3.20
@@ -29,6 +30,7 @@ WORKDIR /app
 
 # Copy only the binary from builder
 COPY --from=builder /app/bin/main .
+COPY --from=builder /app/bin/seed .
 COPY --from=builder /app/Makefile ./Makefile
 COPY ./entrypoint.sh ./entrypoint.sh
 COPY ./cmd/migrate ./cmd/migrate
