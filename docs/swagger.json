@@ -321,7 +321,7 @@
                 "frequency_band": {
                     "type": "string"
                 },
-                "frequency_mhx": {
+                "frequency_mhz": {
                     "type": "number"
                 },
                 "generated_at": {
@@ -412,7 +412,7 @@
                 "frequency_band": {
                     "type": "string"
                 },
-                "frequency_mhx": {
+                "frequency_mhz": {
                     "type": "number"
                 },
                 "generated_at": {

@@ -31,7 +31,7 @@ WORKDIR /app
 COPY --from=builder /app/bin/main .
 COPY --from=builder /app/Makefile ./Makefile
 COPY ./entrypoint.sh ./entrypoint.sh
-COPY ./cmd/migrate/migrations ./cmd/migrate/migrations
+COPY ./cmd/migrate ./cmd/migrate
 
 # Expose app port (adjust if needed)
 EXPOSE 8080

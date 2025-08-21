@@ -62,7 +62,7 @@ type PostCellPayload struct {
 	Tac           int     `json:"tac"`
 	FrequencyBand string  `json:"frequency_band"`
 	ARFCN         int     `json:"arfcn"`
-	FrequencyMHZ  float32 `json:"frequency_mhx"`
+	FrequencyMHZ  float32 `json:"frequency_mhz"`
 	RXLev         int     `json:"rxlev"`
 	RXQual        int     `json:"rxqual"`
 	ECN0          float32 `json:"ecn0"`

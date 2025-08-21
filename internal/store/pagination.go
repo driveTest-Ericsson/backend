@@ -13,7 +13,7 @@ type OrderByField struct {
 }
 
 type PaginatedCellQuery struct {
-	Limit          int      `json:"limit" validate:"gte=1,lte=20"`
+	Limit          int      `json:"limit" validate:"gte=1,lte=300"`
 	Offset         int      `json:"offset" validate:"gte=0"`
 	Search         string   `json:"search" validate:"max=100"`
 	Since          string   `json:"since"`

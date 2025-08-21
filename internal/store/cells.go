@@ -24,7 +24,7 @@ type Cell struct {
 	Tac           int     `json:"tac"`
 	FrequencyBand string  `json:"frequency_band"`
 	ARFCN         int     `json:"arfcn"`
-	FrequencyMHZ  float32 `json:"frequency_mhx"`
+	FrequencyMHZ  float32 `json:"frequency_mhz"`
 	RXLev         int     `json:"rxlev"`
 	RXQual        int     `json:"rxqual"`
 	ECN0          float32 `json:"ecn0"`
@@ -215,4 +215,27 @@ func (s *CellStore) Delete(ctx context.Context, id int64) error {
 	}
 
 	return nil
+}
+
+func (s *CellStore) IsEmpty(ctx context.Context) (bool, error) {
+	query := `SELECT EXISTS (SELECT 1 FROM cell)`
+
+	ctx, cancel := context.WithTimeout(ctx, QueryTimeoutDuration)
+	defer cancel()
+
+	res, err := s.db.ExecContext(ctx, query)
+	if err != nil {
+		return false, err
+	}
+
+	rows, err := res.RowsAffected()
+	if err != nil {
+		return false, err
+	}
+
+	if rows == 0 {
+		return true, nil
+	}
+
+	return false, nil
 }
