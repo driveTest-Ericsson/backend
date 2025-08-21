@@ -20,7 +20,7 @@ RUN go build -buildvcs=false -o ./bin/main ./cmd/api
 FROM alpine:3.20
 
 # Install CA certificates (needed for HTTPS calls)
-RUN apk add --no-cache ca-certificates
+RUN apk add --no-cache bash make ca-certificates
 
 WORKDIR /app
 
