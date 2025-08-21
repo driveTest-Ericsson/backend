@@ -148,7 +148,7 @@ func (s *CellStore) GetCells(ctx context.Context, cq *PaginatedCellQuery) (*[]Ce
 	ctx, cancel := context.WithTimeout(ctx, QueryTimeoutDuration)
 	defer cancel()
 
-	rows, err := s.db.QueryContext(ctx, query, cq.Search, cq.Limit, cq.Offset)
+	rows, err := s.db.QueryContext(ctx, query, cq.Limit, cq.Offset)
 	if err != nil {
 		return nil, err
 	}
@@ -164,6 +164,7 @@ func (s *CellStore) GetCells(ctx context.Context, cq *PaginatedCellQuery) (*[]Ce
 			&cell.UserID,
 			&cell.Lat,
 			&cell.Long,
+			&cell.CellTech,
 			&cell.CellIdentity,
 			&cell.PLMN,
 			&cell.Lac,
