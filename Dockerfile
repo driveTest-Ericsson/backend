@@ -1,10 +1,8 @@
-FROM golang:1.24.3-alpine
+# Stage 1: Build
+FROM golang:1.24.3-alpine AS builder
 
-# Install necessary packages
-RUN apk add --no-cache \
-    bash curl git make build-base unzip \
-    && go install github.com/air-verse/air@latest \
-    && go install github.com/swaggo/swag/cmd/swag@latest
+# Install build dependencies
+RUN apk add --no-cache git build-base
 
 WORKDIR /app
 
@@ -12,11 +10,25 @@ WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod download
 
-# Copy application code
+# Copy source code
 COPY . .
+
+# Build the Go app (static binary)
+RUN go build -o server .
+
+# Stage 2: Run
+FROM alpine:3.20
+
+# Install CA certificates (needed for HTTPS calls)
+RUN apk add --no-cache ca-certificates
+
+WORKDIR /app
+
+# Copy binary from builder
+COPY --from=builder /app/server .
 
 # Expose app port (adjust if needed)
 EXPOSE 8080
 
-# Enable direnv and run Air
-CMD ["bash", "-c", "air"]
+# Run the binary
+CMD ["./server"]

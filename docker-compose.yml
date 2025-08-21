@@ -1,15 +1,15 @@
 services:
-  # app:
-  #   image: gotrain:latest
-  #   ports:
-  #     - "8080:8080"
-  #   volumes:
-  #     - .:/app
-  #   working_dir: /app
-  #   env_file:
-  #     - .envrc
-  #   depends_on:
-  #     - db
+  app:
+    image: gotrain:latest
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/app
+    working_dir: /app
+    env_file:
+      - .envrc
+    depends_on:
+      - db
 
   db:
     image: postgres:13.21-alpine3.20
