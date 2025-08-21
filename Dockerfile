@@ -20,7 +20,10 @@ RUN go build -buildvcs=false -o ./bin/main ./cmd/api
 FROM alpine:3.20
 
 # Install CA certificates (needed for HTTPS calls)
-RUN apk add --no-cache bash make ca-certificates
+RUN apk add --no-cache bash ca-certificates curl \
+    && curl -L https://github.com/golang-migrate/migrate/releases/download/v4.18.3/migrate.linux-amd64.tar.gz \
+    | tar xvz -C /usr/local/bin \
+    && chmod +x /usr/local/bin/migrate
 
 WORKDIR /app
 
