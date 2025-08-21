@@ -14,7 +14,7 @@ RUN go mod download
 COPY . .
 
 # Build the Go app (static binary)
-RUN go build -o server .
+RUN go build -buildvcs=false -o ./bin/main ./cmd/api
 
 # Stage 2: Run
 FROM alpine:3.20
