@@ -31,4 +31,4 @@ COPY --from=builder /app/bin/main .
 EXPOSE 8080
 
 # Run the binary
-CMD ["./main"]
+CMD ["sh", "./entrypoint.sh"]
