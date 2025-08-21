@@ -24,11 +24,11 @@ RUN apk add --no-cache ca-certificates
 
 WORKDIR /app
 
-# Copy binary from builder
-COPY --from=builder /app/server .
+# Copy only the binary from builder
+COPY --from=builder /app/bin/main .
 
 # Expose app port (adjust if needed)
 EXPOSE 8080
 
 # Run the binary
-CMD ["./server"]
+CMD ["./main"]
