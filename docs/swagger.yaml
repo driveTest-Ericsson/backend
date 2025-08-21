@@ -27,7 +27,7 @@ definitions:
         type: number
       frequency_band:
         type: string
-      frequency_mhx:
+      frequency_mhz:
         type: number
       generated_at:
         type: string
@@ -89,7 +89,7 @@ definitions:
         type: number
       frequency_band:
         type: string
-      frequency_mhx:
+      frequency_mhz:
         type: number
       generated_at:
         type: string

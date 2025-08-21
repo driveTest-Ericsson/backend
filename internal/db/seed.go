@@ -10,13 +10,16 @@ import (
 	"github.com/driveTest-Ericsson/backend/internal/store"
 )
 
-// define array of datas here, for randomness
-
 func Seed(store store.Storage, db *sql.DB) {
 
 	ctx := context.Background()
 
 	cells := generateCells(200)
+
+	if empty, _ := store.Cells.IsEmpty(ctx); !empty {
+		log.Println("skipping seeding ...")
+		return
+	}
 
 	for _, cell := range cells {
 		if _, err := store.Cells.Create(ctx, cell); err != nil {
@@ -29,9 +32,9 @@ func Seed(store store.Storage, db *sql.DB) {
 }
 
 func generateCells(num int) []*store.Cell {
-	// Some sample values to pick from
-	cellTechs := []string{"GSM", "UMTS", "LTE", "NR"}
-	plmns := []string{"00101", "00202", "310260", "40445"} // MCC+MNC
+
+	cellTechs := []string{"GSM", "GPRS", "EDGE", "UMTS", "HSPA", "HSPA+", "LTE", "LTE-Adv", "NR", "5G"}
+	plmns := []string{"00101", "00202", "310260", "40445"}
 	bands := []string{"Band 1", "Band 3", "Band 5", "Band 7", "Band 20"}
 
 	rand.Seed(time.Now().UnixNano())

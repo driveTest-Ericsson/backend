@@ -32,6 +32,7 @@ type Storage struct {
 		GetByID(context.Context, int64) (*Cell, error)
 		GetCells(context.Context, *PaginatedCellQuery) (*[]Cell, error)
 		Delete(context.Context, int64) error
+		IsEmpty(context.Context) (bool, error)
 	}
 }
 

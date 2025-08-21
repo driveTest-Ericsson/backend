@@ -329,7 +329,7 @@ const docTemplate = `{
                 "frequency_band": {
                     "type": "string"
                 },
-                "frequency_mhx": {
+                "frequency_mhz": {
                     "type": "number"
                 },
                 "generated_at": {
@@ -420,7 +420,7 @@ const docTemplate = `{
                 "frequency_band": {
                     "type": "string"
                 },
-                "frequency_mhx": {
+                "frequency_mhz": {
                     "type": "number"
                 },
                 "generated_at": {
