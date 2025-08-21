@@ -19,7 +19,7 @@ func Seed(store store.Storage, db *sql.DB) {
 	cells := generateCells(200)
 
 	for _, cell := range cells {
-		if err := store.Cells.Create(ctx, cell); err != nil {
+		if _, err := store.Cells.Create(ctx, cell); err != nil {
 			log.Println("Error creating cell:", err)
 			return
 		}

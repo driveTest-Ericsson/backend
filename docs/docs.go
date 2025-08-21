@@ -150,6 +150,51 @@ const docTemplate = `{
                         "schema": {}
                     }
                 }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Adds the new data to Cell datas",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "cell"
+                ],
+                "summary": "Create Cell Data",
+                "parameters": [
+                    {
+                        "description": "cell params",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/main.PostCellPayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Cell Created",
+                        "schema": {
+                            "$ref": "#/definitions/store.Cell"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {}
+                    }
+                }
             }
         },
         "/users/activate/{token}": {
@@ -260,6 +305,71 @@ const docTemplate = `{
                     "type": "string",
                     "maxLength": 72,
                     "minLength": 3
+                }
+            }
+        },
+        "main.PostCellPayload": {
+            "type": "object",
+            "properties": {
+                "arfcn": {
+                    "type": "integer"
+                },
+                "c_i": {
+                    "type": "number"
+                },
+                "cell_identity": {
+                    "type": "integer"
+                },
+                "cell_tech": {
+                    "type": "string"
+                },
+                "ecn0": {
+                    "type": "number"
+                },
+                "frequency_band": {
+                    "type": "string"
+                },
+                "frequency_mhx": {
+                    "type": "number"
+                },
+                "generated_at": {
+                    "type": "string"
+                },
+                "lac": {
+                    "type": "integer"
+                },
+                "lat": {
+                    "type": "number"
+                },
+                "long": {
+                    "type": "number"
+                },
+                "plmn": {
+                    "type": "string"
+                },
+                "rac": {
+                    "type": "integer"
+                },
+                "rscp": {
+                    "type": "integer"
+                },
+                "rsrp": {
+                    "type": "integer"
+                },
+                "rsrq": {
+                    "type": "number"
+                },
+                "rxlev": {
+                    "type": "integer"
+                },
+                "rxqual": {
+                    "type": "integer"
+                },
+                "sinr": {
+                    "type": "number"
+                },
+                "tac": {
+                    "type": "integer"
                 }
             }
         },

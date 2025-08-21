@@ -28,7 +28,7 @@ type Storage struct {
 	}
 
 	Cells interface {
-		Create(context.Context, *Cell) error
+		Create(context.Context, *Cell) (*Cell, error)
 		GetByID(context.Context, int64) (*Cell, error)
 		GetCells(context.Context, *PaginatedCellQuery) (*[]Cell, error)
 		Delete(context.Context, int64) error

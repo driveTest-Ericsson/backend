@@ -37,7 +37,7 @@ type Cell struct {
 	CreatedAt     string  `json:"created_at"`
 }
 
-func (s *CellStore) Create(ctx context.Context, cell *Cell) error {
+func (s *CellStore) Create(ctx context.Context, cell *Cell) (*Cell, error) {
 	query := `
 	INSERT INTO cell (user_id, lat, long, cell_tech, cell_identity, plmn, lac, rac, tac, frequency_band, arfcn, frequency_mhz, rxlev, rxqual, ec_n0, c_i, rscp, rsrp, rsrq, sinr, generated_at)
 	VALUES (1, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20)
@@ -78,10 +78,10 @@ func (s *CellStore) Create(ctx context.Context, cell *Cell) error {
 
 	if err != nil {
 		log.Println("hiiiiiiii")
-		return err
+		return nil, err
 	}
 
-	return nil
+	return cell, nil
 }
 
 func (s *CellStore) GetByID(ctx context.Context, id int64) (*Cell, error) {

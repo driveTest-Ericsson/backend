@@ -118,6 +118,7 @@ func (app *application) mount() http.Handler {
 			r.Group(func(r chi.Router) {
 				r.Use(app.AuthTokenMiddleware)
 				r.Get("/", app.getCellsHandler)
+				r.Post("/", app.postCellHandler)
 			})
 		})
 
