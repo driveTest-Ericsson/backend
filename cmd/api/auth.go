@@ -130,6 +130,12 @@ type CreateUserTokenPayload struct {
 	Password string `json:"password" validate:"required,min=3,max=72"`
 }
 
+type createTokenResponse struct {
+	Username string `json:"username"`
+	Email    string `json:"email"`
+	Token    string `json:"token"`
+}
+
 // createTokenHandler godoc
 //
 //	@Summary		Creates a token
@@ -200,7 +206,13 @@ func (app *application) createTokenHandler(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	if err := app.jsonResponse(w, http.StatusCreated, token); err != nil {
+	postData := createTokenResponse{
+		Username: user.Username,
+		Email:    user.Email,
+		Token:    token,
+	}
+
+	if err := app.jsonResponse(w, http.StatusCreated, postData); err != nil {
 		app.internalServerError(w, r, err)
 		return
 	}
