@@ -170,7 +170,6 @@ func (s *UserStore) CreateAndInvite(ctx context.Context, user *User, token strin
 		return nil
 
 	})
-
 }
 
 func (s *UserStore) Activate(ctx context.Context, token string) error {

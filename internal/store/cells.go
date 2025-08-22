@@ -4,7 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"log"
 )
 
 type CellStore struct {
@@ -77,7 +76,6 @@ func (s *CellStore) Create(ctx context.Context, cell *Cell) (*Cell, error) {
 	)
 
 	if err != nil {
-		log.Println("hiiiiiiii")
 		return nil, err
 	}
 
@@ -233,7 +231,7 @@ func (s *CellStore) IsEmpty(ctx context.Context) (bool, error) {
 		return false, err
 	}
 
-	if rows == 0 {
+	if rows == 0 || rows == 1 {
 		return true, nil
 	}
 
