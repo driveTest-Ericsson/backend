@@ -139,7 +139,7 @@ func (s *CellStore) GetCells(ctx context.Context, cq *PaginatedCellQuery) (*[]Ce
 	query := `
 	SELECT *
 	FROM cell
-	ORDER BY ` + cq.OrderBy + `
+	ORDER BY ` + cq.OrderBy + ` DESC
 	LIMIT $1 OFFSET $2;
 	`
 
